@@ -1,8 +1,8 @@
 import 'dotenv/config';
 
 import { faker } from '@faker-js/faker';
-import { Currency, StockStatus } from 'src/product/domain/enum';
-import { ProductEntity } from 'src/product/infrastructure/adapters/out/product.entity';
+import { Currency, StockStatus } from 'src/modules/product/domain/enum';
+import { ProductEntity } from 'src/modules/product/infrastructure/adapters/out/product.entity';
 import { DataSource } from 'typeorm';
 import { dataSourceOptions } from '../dataSourceOptions';
 
