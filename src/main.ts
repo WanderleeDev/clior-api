@@ -1,4 +1,4 @@
-import './shared/infra/monitoring/instrument';
+// import './shared/infra/monitoring/instrument';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { setupSwagger } from './shared/infra/config/swagger.config';

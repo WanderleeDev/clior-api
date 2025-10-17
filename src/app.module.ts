@@ -27,7 +27,7 @@ import { ThrottlerGuard } from '@nestjs/throttler';
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_NAME'),
         entities: [resolve(__dirname, 'modules', '**', '*.entity{.ts,.js}')],
-        synchronize: true,
+        synchronize: configService.get<string>('NODE_ENV') !== 'production',
       }),
     }),
     setupThrottlerConfig(),
