@@ -1,4 +1,4 @@
-// import './shared/infra/monitoring/instrument';
+import './shared/infra/monitoring/instrument';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { setupSwagger } from './shared/infra/config/swagger.config';
@@ -16,7 +16,8 @@ async function bootstrap() {
   setupGlobalFilters(app);
   app.use(cookieParser());
 
-  await app.listen(process.env.PORT ?? 3000);
+  const port = process.env.PORT ? parseInt(process.env.PORT) : 80;
+  await app.listen(port, '0.0.0.0');
 }
 
 bootstrap().catch((error) => console.error(error));
