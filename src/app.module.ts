@@ -5,10 +5,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { SentryGlobalFilter, SentryModule } from '@sentry/nestjs/setup';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { AuthModule } from './modules/auth/auth.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { resolve } from 'path';
+import { ConfigModule } from '@nestjs/config';
 import { setupThrottlerConfig } from './shared/infra/config/throttler.config';
 import { ThrottlerGuard } from '@nestjs/throttler';
+import { dataSourceOptions } from './database/datasource';
 
 @Module({
   imports: [
@@ -16,24 +16,7 @@ import { ThrottlerGuard } from '@nestjs/throttler';
       isGlobal: true,
       envFilePath: '.env',
     }),
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get<string>('DB_HOST'),
-        port: configService.get<number>('DB_PORT'),
-        username: configService.get<string>('DB_USERNAME'),
-        password: configService.get<string>('DB_PASSWORD'),
-        database: configService.get<string>('DB_NAME'),
-        entities: [resolve(__dirname, 'modules', '**', '*.entity{.ts,.js}')],
-        synchronize: configService.get<string>('NODE_ENV') !== 'production',
-        ssl:
-          configService.get<string>('NODE_ENV') === 'production'
-            ? { rejectUnauthorized: false }
-            : false,
-      }),
-    }),
+    TypeOrmModule.forRoot(dataSourceOptions),
     setupThrottlerConfig(),
     SentryModule.forRoot(),
     ProductModule,

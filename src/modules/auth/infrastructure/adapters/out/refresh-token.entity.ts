@@ -9,6 +9,12 @@ export class RefreshTokenEntity extends BaseEntity {
   @Column('varchar', { length: 255 })
   hashedToken: string;
 
+  @Column('varchar', { length: 255 })
+  ip: string;
+
+  @Column('varchar', { length: 255 })
+  userAgent: string;
+
   @Column({ type: 'timestamp' })
   expiresAt: Date;
 }

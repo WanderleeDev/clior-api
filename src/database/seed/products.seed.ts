@@ -3,14 +3,13 @@ import 'dotenv/config';
 import { faker } from '@faker-js/faker';
 import { Currency, StockStatus } from 'src/modules/product/domain/enum';
 import { ProductEntity } from 'src/modules/product/infrastructure/adapters/out/product.entity';
-import { DataSource } from 'typeorm';
-import { dataSourceOptions } from '../dataSourceOptions';
+import dataSource from '../datasource';
 
 const SEED_ARG = process.env.SEED_ARG;
 
 export async function seddingProducts() {
-  const datasource = new DataSource(dataSourceOptions);
-  await datasource.initialize();
+  const datasourceClient = dataSource;
+  await datasourceClient.initialize();
 
   if (!SEED_ARG) {
     throw new Error('SEED_ARG is required');
@@ -39,7 +38,7 @@ export async function seddingProducts() {
       Object.assign(new ProductEntity(), p),
     );
 
-    const repository = datasource.getRepository(ProductEntity);
+    const repository = datasourceClient.getRepository(ProductEntity);
     await repository.save(products);
 
     console.log('Products seeded successfully');
@@ -47,7 +46,7 @@ export async function seddingProducts() {
     console.error('Error seeding products:', error);
     process.exit(1);
   } finally {
-    await datasource.destroy();
+    await datasourceClient.destroy();
   }
 }
 
